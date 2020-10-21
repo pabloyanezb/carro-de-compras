@@ -1,5 +1,6 @@
 import React from 'react';
 import {Popover, PopoverHeader, PopoverBody, Table, Badge, Button} from 'reactstrap';
+import './Carro.css'
 import {listaCarrito} from '../listaCarrito.json';
 
 class Carro extends React.Component {
@@ -18,8 +19,11 @@ class Carro extends React.Component {
     }));
   }
 
-  contarProductos() {
-    return listaCarrito.length
+  total() {
+    let total = this.state.listaCarrito.reduce(function(sum, i) {
+      return sum + parseInt(i.precio*1000);
+    },0);
+    return Intl.NumberFormat("de-DE").format(total);
   }
 
   render() {
@@ -29,7 +33,7 @@ class Carro extends React.Component {
           <tr key={i}>
             <td>{(i += 1)}</td>
             <td>{listaCarrito.titulo}</td>
-            <td>{listaCarrito.precio}</td>
+            <td>${listaCarrito.precio}</td>
           </tr>
         )
       }
@@ -40,11 +44,11 @@ class Carro extends React.Component {
           <span className="material-icons">
             shopping_cart
           </span>
-          <Badge color="success">
-            {this.contarProductos()}
+          <Badge color="success" id="cantidadProductos">
+            {listaCarrito.length}
           </Badge>
         </Button>
-        <Popover target="Popover1" placement="bottom" isOpen={this.state.popoverOpen} toggle={this.toggle}>
+        <Popover id="popover" target="Popover1" placement="bottom" isOpen={this.state.popoverOpen} toggle={this.toggle}>
           <PopoverHeader>Lista de compras</PopoverHeader>
           <PopoverBody>
             <Table>
@@ -58,6 +62,13 @@ class Carro extends React.Component {
               <tbody>
                 {arregloCarrito}
               </tbody>
+              <tfoot>
+                <tr>
+                  <th>Total:</th>
+                  <td></td>
+                  <td>${this.total()} CLP</td>
+                </tr>
+              </tfoot>
             </Table>
           </PopoverBody>
         </Popover>

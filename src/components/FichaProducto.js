@@ -8,7 +8,10 @@ class FichaProducto extends React.Component {
     super();
     this.state = {
       modal: false,
-      listaCarrito
+      listaCarrito,
+      stock: parseInt(props.props.stock),
+      disabled: false,
+      text: "Agregar al carrito"
     }
     this.toggle = this.toggle.bind(this);
     this.agregarCarrito = this.agregarCarrito.bind(this);
@@ -23,14 +26,30 @@ class FichaProducto extends React.Component {
   }
 
   agregarCarrito() {
-    listaCarrito.push({
-      "titulo": this.props.props.titulo,
-      "precio": this.props.props.precio
-    });
     this.setState(prevState => ({
       modal: !prevState.modal,
-    }))
-    console.log(listaCarrito.length)
+    }));
+    if (this.state.stock !== 0) {
+      this.setState(prevState => ({
+        stock: prevState.stock - 1,
+      }), () => {
+        console.log(this.state.stock)
+        if (this.state.stock === 0) {
+          this.setState(() => ({
+            disabled: true,
+            text: "Sin stock :("
+          }));
+        }
+      });
+      listaCarrito.push({
+        "titulo": this.props.props.titulo,
+        "precio": this.props.props.precio
+      });
+
+      const cantidadProductos = document.getElementById("cantidadProductos");
+      cantidadProductos.innerText = listaCarrito.length;
+
+    }
   }
 
   render() {
@@ -45,10 +64,10 @@ class FichaProducto extends React.Component {
             <CardImg src={this.props.props.imagen}/>
             {this.props.props.descripcion}
             <p>Este producto tiene un valor de <b>${this.props.props.precio}</b></p>
-            <p>Hay <b>{this.props.props.stock}</b> unidades de este producto disponibles.</p>
+            <p>Hay <b>{this.state.stock}</b> unidades de este producto disponibles.</p>
           </ModalBody>
           <ModalFooter className="modalFooter">
-            <Button color="success" onClick={this.agregarCarrito}>Agregar al carrito</Button>
+            <Button color="success" onClick={this.agregarCarrito} disabled={this.state.disabled}> {this.state.text} </Button>
             <Button color="secondary" onClick={this.toggle}>Volver atrás</Button>
           </ModalFooter>
         </Modal>
