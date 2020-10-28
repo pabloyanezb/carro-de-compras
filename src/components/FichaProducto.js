@@ -56,15 +56,15 @@ class FichaProducto extends React.Component {
     return(
       <Container>
         <Button onClick={this.toggle} color="outline-success">Ver Ficha</Button>
-        <Modal isOpen={this.state.modal}>
+        <Modal isOpen={this.state.modal} className="modal-sm">
           <ModalHeader>
             {this.props.props.titulo}
           </ModalHeader>
-          <ModalBody>
+          <ModalBody className="pb-0">
             <CardImg src={this.props.props.imagen}/>
             {this.props.props.descripcion}
-            <p>Este producto tiene un valor de <b>${this.props.props.precio}</b></p>
-            <p>Hay <b>{this.state.stock}</b> unidades de este producto disponibles.</p>
+            <p id="precio"><b>${this.props.props.precio}</b></p>
+            <p>Hay <b>{this.state.stock}</b> unidades en stock</p>
           </ModalBody>
           <ModalFooter className="modalFooter">
             <Button color="success" onClick={this.agregarCarrito} disabled={this.state.disabled}> {this.state.text} </Button>

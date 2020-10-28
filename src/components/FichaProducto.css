@@ -1,3 +1,7 @@
 .modalFooter {
   margin: 0 auto;
 }
+#precio {
+  font-size: x-large;
+  color: rgb(14, 85, 14);
+}
